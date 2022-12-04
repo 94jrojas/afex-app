@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: game-services
+commonLabels:
+  app: afex-frontend-app-v4
+
+resources:
+- deployment-v4.yaml
+
+images:
+  - name: image-afex-frontend-app-v4
+    newName: registry.radioactivegames.net/afex-frontend
+    newTag: v29    
+
+configMapGenerator:
+- name: configmap-afex-frontend-app-v4
+  literals:
+  - REACT_APP_API_URL=https://8w5l8paob7.execute-api.us-west-2.amazonaws.com/dev
+  - REACT_APP_API_KEY=Wlksdjfl56w5f56w546w45f6w8f4w6f
+  # - PUBLIC_URL=http://143.244.210.156/afex-frontend-app/v4

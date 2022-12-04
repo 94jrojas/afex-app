@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+
+  afex-fronend:
+    image: afex-frontend:v17
+    container_name: afex-app
+    restart: always
+    environment:
+      REACT_APP_API_URL: "https://8w5l8paob7.execute-api.us-west-2.amazonaws.com/dev"
+      REACT_APP_API_KEY: "Wlksdjfl56w5f56w546w45f6w8f4w6f"      
+      PORT: 4000      
+    ports:
+      - '4000:4000'

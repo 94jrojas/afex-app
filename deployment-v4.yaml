@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: afex-frontend-app-v4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: afex-frontend-app-v4
+  template:
+    metadata:
+      labels:
+        role: afex-frontend-app-v4
+    spec:
+      imagePullSecrets:
+        - name: regcred-game-services
+      containers:
+      - name: afex-frontend-app-v4
+        image: image-afex-frontend-app-v4
+        env:
+        - name: REACT_APP_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: configmap-afex-frontend-app-v4
+              key: REACT_APP_API_URL
+        - name: REACT_APP_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: configmap-afex-frontend-app-v4
+              key: REACT_APP_API_KEY
+        # - name: PUBLIC_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: configmap-afex-frontend-app-v4
+        #       key: PUBLIC_URL
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 1
+          periodSeconds: 10
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: afex-frontend-app-v4
+spec:
+  ports:
+  - port: 8080
+    targetPort: 80
+  selector:
+    role: afex-frontend-app-v4
